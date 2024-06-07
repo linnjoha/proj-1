@@ -1,5 +1,7 @@
 :root {
-  --boxColor: rgba(0, 255, 255, 0.386);
+  --boxColor: #0ff7;
+  --rotateSpeed: 30s;
+  --bounceSpeed: 1.5s;
 }
 
 body {
@@ -15,6 +17,12 @@ body {
 .sceen {
   position: relative;
   transform-style: preserve-3d;
+  animation: sceneRotate var(--rotateSpeed) infinite linear;
+}
+@keyframes sceneRotate {
+  to {
+    transform: rotateY(360deg);
+  }
 }
 
 .ball {
@@ -25,13 +33,49 @@ body {
   position: absolute;
   left: -0.5em;
   bottom: 1em;
+  background-image: radial-gradient(circle at top, lightblue, #000);
+  animation: ballBounce var(--bounceSpeed) infinite ease-out,
+    sceneRotate var(--rotateSpeed) infinite linear reverse;
+}
+@keyframes ballBounce {
+  0%,
+  100% {
+    bottom: 0.5em;
+  }
+  50% {
+    bottom: 3em;
+    animation-timing-function: ease-in;
+  }
+}
+.ballShadow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(#0007, #0000 50%);
+  animation: ballShadow var(--bounceSpeed) infinite ease-out;
+}
+@keyframes ballShadow {
+  0%,
+  8%,
+  93.5%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(2);
+    opacity: 0.5;
+    animation-timing-function: ease-in;
+  }
 }
 .cube {
+  transform-style: preserve-3d;
   width: 2em;
   height: 2em;
   position: absolute;
-  top: -1em;
+  bottom: -1em;
   left: -1em;
+  animation: cubeHeight var(--bounceSpeed) infinite linear;
 
   .left,
   .right,
@@ -41,7 +85,7 @@ body {
     height: 100%;
     position: absolute;
     background: var(--boxColor);
-    box-shadow: 0 0 0.5 #000a inset;
+    box-shadow: 0 0 0.5em #000a inset;
   }
   .front {
     transform: translateZ(1em);
@@ -60,7 +104,27 @@ body {
     height: 2em;
     position: absolute;
     background: var(--boxColor);
+    transform: translateY(-50%) rotateX(90deg);
+    box-shadow: 0 0 0.5em #000a inset;
+  }
+  .bottom {
+    width: 2em;
+    height: 2em;
+    position: absolute;
+    background: #0007;
+    bottom: 0;
     transform: translateY(50%) rotateX(90deg);
+    box-shadow: 0 0 0.5em #000;
+  }
+}
+@keyframes cubeHeight {
+  0%,
+  100% {
+    height: 1.5em;
+  }
+  8%,
+  93.5% {
+    height: 2em;
   }
 }
 
@@ -71,10 +135,7 @@ body {
   transform: translate(-50%, -50%) rotateX(90deg);
   width: 15em;
   height: 15em;
-  background-image: repeating-conic-gradient(
-    from 45deg,
-    #111 0deg 90deg,
-    #222 90deg 180deg
-  );
-  background-size: 1em 1em;
+  background-image: radial-gradient(#0000, #000),
+    repeating-conic-gradient(from 45deg, #111 0deg 90deg, #222 90deg 180deg);
+  background-size: 100%, 1em 1em;
 }
